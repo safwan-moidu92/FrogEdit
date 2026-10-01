@@ -132,12 +132,16 @@ private fun LineNumberGutter(
                 val yOffset = topPadding.toPx() - scrollState.value
                 val rightEdge = size.width - GutterHorizontalPadding.toPx()
 
+                // Walk logical lines by their start offsets and map each to the visual row
+                // containing it, rather than inferring line starts from visual rows (which can
+                // report odd start offsets, e.g. when the field is narrower than a glyph).
                 var logicalLine = 0
-                for (visualLine in 0 until layout.lineCount) {
-                    val lineStart = layout.getLineStart(visualLine)
-                    val startsLogicalLine = visualLine == 0 || text[lineStart - 1] == '\n'
-                    if (!startsLogicalLine) continue
+                var lineStart = 0
+                while (lineStart <= text.length) {
                     logicalLine++
+                    val visualLine = layout.getLineForOffset(lineStart)
+                    val nextBreak = text.indexOf('\n', lineStart)
+                    lineStart = if (nextBreak == -1) text.length + 1 else nextBreak + 1
 
                     val top = layout.getLineTop(visualLine) + yOffset
                     val bottom = layout.getLineBottom(visualLine) + yOffset
