@@ -24,3 +24,8 @@ kotlin {
         }
     }
 }
+
+compose.resources {
+    // Expose Res so desktopApp can use shared drawables (e.g. the window icon)
+    publicResClass = true
+}

@@ -9,11 +9,18 @@ import androidx.compose.ui.input.key.KeyShortcut
 import androidx.compose.ui.window.MenuBar
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import frogedit.shared.generated.resources.Res
+import frogedit.shared.generated.resources.frog_edit
+import org.jetbrains.compose.resources.painterResource
 
 fun main() = application {
     var showAbout by remember { mutableStateOf(false) }
 
-    Window(onCloseRequest = ::exitApplication, title = "Frog Edit - Text Editor") {
+    Window(
+        onCloseRequest = ::exitApplication,
+        title = "Frog Edit - Text Editor",
+        icon = painterResource(Res.drawable.frog_edit)
+    ) {
         MenuBar {
             Menu("File", mnemonic = 'F') {
                 Item(
