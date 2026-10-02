@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -43,8 +44,10 @@ private val EditorPadding = 12.dp
 private val GutterHorizontalPadding = 8.dp
 
 @Composable
-fun TextEditor(modifier: Modifier = Modifier) {
-    val state = rememberTextFieldState()
+fun TextEditor(
+    modifier: Modifier = Modifier,
+    state: TextFieldState = rememberTextFieldState()
+) {
     val scrollState = rememberScrollState()
     var layoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
 

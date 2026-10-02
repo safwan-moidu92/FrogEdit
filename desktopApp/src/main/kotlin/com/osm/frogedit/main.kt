@@ -47,5 +47,9 @@ fun main() = application {
         }
 
         App()
+
+        if (showAbout) {
+            AboutDialog(onClose = { showAbout = false })
+        }
     }
 }
