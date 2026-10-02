@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -30,10 +31,12 @@ import frogedit.shared.generated.resources.compose_multiplatform
 
 @Composable
 @Preview
-fun App(settings: EditorSettings = EditorSettings()) {
+fun App(
+    settings: EditorSettings = EditorSettings(),
+    editorState: TextFieldState = rememberTextFieldState()
+) {
     FrogEditTheme {
         var showContent by remember { mutableStateOf(false) }
-        val editorState = rememberTextFieldState()
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.primaryContainer)
