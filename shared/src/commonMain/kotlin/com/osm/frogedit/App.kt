@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.osm.frogedit.composables.StatusBar
 import com.osm.frogedit.composables.TextEditor
+import com.osm.frogedit.settings.EditorSettings
 import com.osm.frogedit.theme.FrogEditTheme
 import org.jetbrains.compose.resources.painterResource
 
@@ -29,7 +30,7 @@ import frogedit.shared.generated.resources.compose_multiplatform
 
 @Composable
 @Preview
-fun App() {
+fun App(settings: EditorSettings = EditorSettings()) {
     FrogEditTheme {
         var showContent by remember { mutableStateOf(false) }
         val editorState = rememberTextFieldState()
@@ -52,8 +53,16 @@ fun App() {
             }) {
                 Text("Select Text", Modifier.fillMaxWidth().padding(8.dp))
             }*/
-            TextEditor(modifier = Modifier.weight(1f), state = editorState)
-            StatusBar(state = editorState)
+            TextEditor(
+                modifier = Modifier.weight(1f),
+                state = editorState,
+                showLineNumbers = settings.showLineNumbers,
+                backgroundColor = settings.editorBackground,
+                textColor = settings.textColor
+            )
+            if (settings.showStatusBar) {
+                StatusBar(state = editorState)
+            }
 
         }
     }

@@ -9,12 +9,17 @@ import androidx.compose.ui.input.key.KeyShortcut
 import androidx.compose.ui.window.MenuBar
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import com.osm.frogedit.composables.AboutDialog
+import com.osm.frogedit.composables.SettingsDialog
+import com.osm.frogedit.settings.SettingsStore
 import frogedit.shared.generated.resources.Res
 import frogedit.shared.generated.resources.frog_edit
 import org.jetbrains.compose.resources.painterResource
 
 fun main() = application {
     var showAbout by remember { mutableStateOf(false) }
+    var showSettings by remember { mutableStateOf(false) }
+    var settings by remember { mutableStateOf(SettingsStore.load()) }
 
     Window(
         onCloseRequest = ::exitApplication,
@@ -29,6 +34,12 @@ fun main() = application {
                     shortcut = KeyShortcut(Key.N, ctrl = true)
                 )
                 Item("Open…", onClick = { /* ... */ })
+                Separator()
+                Item(
+                    "Settings…",
+                    onClick = { showSettings = true },
+                    shortcut = KeyShortcut(Key.Comma, ctrl = true)
+                )
                 Separator()
                 Item("Exit", onClick = ::exitApplication)
             }
@@ -46,7 +57,18 @@ fun main() = application {
             }
         }
 
-        App()
+        App(settings = settings)
+
+        if (showSettings) {
+            SettingsDialog(
+                settings = settings,
+                onSettingsChange = {
+                    settings = it
+                    SettingsStore.save(it)
+                },
+                onClose = { showSettings = false }
+            )
+        }
 
         if (showAbout) {
             AboutDialog(onClose = { showAbout = false })

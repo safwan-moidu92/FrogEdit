@@ -28,7 +28,10 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.isSpecified
+import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
@@ -46,7 +49,10 @@ private val GutterHorizontalPadding = 8.dp
 @Composable
 fun TextEditor(
     modifier: Modifier = Modifier,
-    state: TextFieldState = rememberTextFieldState()
+    state: TextFieldState = rememberTextFieldState(),
+    showLineNumbers: Boolean = true,
+    backgroundColor: Color = Color.Unspecified,
+    textColor: Color = Color.Unspecified
 ) {
     val scrollState = rememberScrollState()
     var layoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
@@ -54,7 +60,7 @@ fun TextEditor(
     val textStyle = TextStyle(
         fontFamily = FontFamily.Monospace,
         fontSize = 14.sp,
-        color = MaterialTheme.colorScheme.onSurface
+        color = textColor.takeOrElse { MaterialTheme.colorScheme.onSurface }
     )
 
     // 1-based logical line numbers spanned by the cursor / selection
@@ -64,16 +70,23 @@ fun TextEditor(
     val activeStartLine = text.subSequence(0, selection.min).count { it == '\n' } + 1
     val activeEndLine = activeStartLine + text.subSequence(selection.min, selection.max).count { it == '\n' }
 
-    Box(modifier.fillMaxSize().border(1.dp, MaterialTheme.colorScheme.outline)) {
+    Box(
+        modifier
+            .fillMaxSize()
+            .border(1.dp, MaterialTheme.colorScheme.outline)
+            .then(if (backgroundColor.isSpecified) Modifier.background(backgroundColor) else Modifier)
+    ) {
         Row(Modifier.fillMaxSize()) {
-            LineNumberGutter(
-                lineCount = lineCount,
-                activeLines = activeStartLine..activeEndLine,
-                layoutResult = layoutResult,
-                scrollState = scrollState,
-                textStyle = textStyle,
-                topPadding = EditorPadding
-            )
+            if (showLineNumbers) {
+                LineNumberGutter(
+                    lineCount = lineCount,
+                    activeLines = activeStartLine..activeEndLine,
+                    layoutResult = layoutResult,
+                    scrollState = scrollState,
+                    textStyle = textStyle,
+                    topPadding = EditorPadding
+                )
+            }
 
             BasicTextField(
                 state = state,

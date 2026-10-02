@@ -1,4 +1,4 @@
-package com.osm.frogedit
+package com.osm.frogedit.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogWindow
 import androidx.compose.ui.window.rememberDialogState
-import com.osm.frogedit.composables.GradientButton
 import com.osm.frogedit.theme.FrogEditTheme
 import frogedit.shared.generated.resources.Res
 import frogedit.shared.generated.resources.frog_edit
